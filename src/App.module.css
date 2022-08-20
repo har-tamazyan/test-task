@@ -1,0 +1,139 @@
+.app {
+    /* width: 100%; */
+    min-height: calc(100vh - 10px);
+    overflow-y: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 10px 0 0;
+    background-color: #e6e6e6;
+}
+
+.cardItem {
+  width: 400px;
+  height: 220px;
+  margin-bottom: 20px;
+  border: 4px solid black;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.userInfoBlock {
+    width: 100%;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+}
+
+.avatarBlock {
+    width: 90px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.firstLetter {
+    width: 100%;
+    height: 100%;
+    font-size: 32px;
+    border: 1px solid black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nameBlock {
+    width: calc(100% - 100px);
+    height: 100%;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.nameTitle {
+
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.occupation {
+    font-size: 17px;
+    font-weight: bold;
+    color: rgba(0,0,0,0.4)
+
+}
+
+.restDataBlock {
+    width: 100%;
+    height: 130px;
+    display: flex;
+}
+
+.chartBlock {
+    width: 270px;
+    height: 100%;
+    padding: 30px 40px 0 0;
+    box-sizing: border-box;
+}
+
+.chartsContainer {
+    width: 100%;
+    height: 75px;
+}
+
+.chartsInfo {
+    color: rgba(0, 0, 0, 0.5)
+}
+
+.logsBlock {
+width: 130px;
+height: 100%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+
+
+.impressionBlock {
+    line-height: 1;
+}
+
+.comversionBlock {
+    line-height: 1;
+}
+
+.logLabel {
+    font-size: 15px;
+    color: rgba(0,0,0, 0.5)
+}
+
+.logValue {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.impressionValue {
+    color: orangered
+}
+
+.conversionValue {
+    color: blue
+}
+
+.revenueBlock {
+    margin-top: 5px;
+    font-size: 24px;
+    color: green;
+    font-weight: 500;
+}
