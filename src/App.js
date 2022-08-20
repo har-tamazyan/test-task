@@ -8,6 +8,8 @@ import RechartsComponent from 'libs/ui/recharts/RechartsComponent';
 
 import {parseUsers} from 'utils'
 
+import {GET_USERS_API_URL} from 'constants'
+
 function App() {
   const [loading, setLoading] = useState(false);
 
@@ -62,24 +64,30 @@ function App() {
     return userLogs;
   }, [users]);
 
-  const fetchUsers =  () => {
-    setLoading(true);
+  const fetchUsers =  async () => {
+     try {
+      setLoading(true);
 
-    fetch('https://api.airtable.com/v0/appBTaX8XIvvr6zEC/Users?maxRecords=3&amp;view=Grid%20view', {
-      method: "GET",
-      mode: 'cors', 
-      headers: {
-          'Authorization': 'Bearer key4v56MUqVr9sNJv'
-        }
-    })
-    .then(response => response.json())
-    .then(json => {
-      const {records: users} = json;
-      
+      const options = {
+        method: "GET",
+        mode: 'cors', 
+        headers: {
+            'Authorization': 'Bearer key4v56MUqVr9sNJv'
+          }
+      }
+
+      const response = await fetch(GET_USERS_API_URL, options);
+
+      const {records: users} = await response.json();
+
       setUsers(parseUsers(users));
 
       setLoading(false);
-    });
+
+    }
+    catch(err) {
+      console.log(err.message)
+    }
   };
 
   useEffect(() => {
@@ -88,54 +96,51 @@ function App() {
 
 
 
-  if (loading) {
-    return <h1>LOADING...</h1>
-  }
-  
   return (
     <div className={styles.app}>
+      {loading ? <h1>LOADING...</h1> : null}
       {
-        users.map(user => (
-          <div className={styles.cardItem} key={user.Id}>
-            <div className={styles.userInfoBlock}>
-              <div className={styles.avatarBlock}>
-                {
-                  user.avatar ? <img className={styles.avatar} src={user.avatar} alt="avatar" /> : <div className={styles.firstLetter}>{user.Name[0]}</div>
-                }
+       !loading && users.length ?  users.map(user => (
+        <div className={styles.cardItem} key={user.Id}>
+          <div className={styles.userInfoBlock}>
+            <div className={styles.avatarBlock}>
+              {
+                user.avatar ? <img className={styles.avatar} src={user.avatar} alt="avatar" /> : <div className={styles.firstLetter}>{user.Name[0]}</div>
+              }
+            </div>
+            <div className={styles.nameBlock}>
+              <div className={styles.nameTitle}>{user.Name}</div>
+              <div className={styles.occupation}>{user.occupation}</div>
+            </div>
+          </div>
+          <div className={styles.restDataBlock}>
+            <div className={styles.chartBlock}>
+              <div className={styles.chartsContainer}>
+                <RechartsComponent data={userLogs[user.Id].conversionChartData} dataKey={'conversion'} />
               </div>
-              <div className={styles.nameBlock}>
-                <div className={styles.nameTitle}>{user.Name}</div>
-                <div className={styles.occupation}>{user.occupation}</div>
+              <div className={styles.chartsInfo}>
+                Conversions {new Date(userLogs[user.Id].chartDataRangeLabels.start).getMonth() + 1}/{new Date(userLogs[user.Id].chartDataRangeLabels.start).getDate()} - {' '}
+                {new Date(userLogs[user.Id].chartDataRangeLabels.end).getMonth() + 1}/{new Date(userLogs[user.Id].chartDataRangeLabels.end).getDate()}
               </div>
             </div>
-            <div className={styles.restDataBlock}>
-              <div className={styles.chartBlock}>
-                <div className={styles.chartsContainer}>
-                  <RechartsComponent data={userLogs[user.Id].conversionChartData} dataKey={'conversion'} />
-                </div>
-                <div className={styles.chartsInfo}>
-                  Conversions {new Date(userLogs[user.Id].chartDataRangeLabels.start).getMonth() + 1}/{new Date(userLogs[user.Id].chartDataRangeLabels.start).getDate()} - {' '}
-                  {new Date(userLogs[user.Id].chartDataRangeLabels.end).getMonth() + 1}/{new Date(userLogs[user.Id].chartDataRangeLabels.end).getDate()}
-                </div>
+            <div className={styles.logsBlock}>
+              <div className={styles.impressionBlock}>
+               <span className={`${styles.logValue} ${styles.impressionValue}`}>{userLogs[user.Id].impression}</span>
+               <br />
+               <span className={styles.logLabel}>impressions</span>
               </div>
-              <div className={styles.logsBlock}>
-                <div className={styles.impressionBlock}>
-                 <span className={`${styles.logValue} ${styles.impressionValue}`}>{userLogs[user.Id].impression}</span>
-                 <br />
-                 <span className={styles.logLabel}>impressions</span>
-                </div>
-                <div className={styles.comversionBlock}>
-                <span className={`${styles.logValue} ${styles.conversionValue}`}>{userLogs[user.Id].conversion}</span>
-                <br />
-                 <span className={styles.logLabel}>conversions</span>
-                </div>
-                <div className={styles.revenueBlock}>
-                <span>{`$${userLogs[user.Id].revenue.toFixed(2)}`}</span>
-                </div>
+              <div className={styles.comversionBlock}>
+              <span className={`${styles.logValue} ${styles.conversionValue}`}>{userLogs[user.Id].conversion}</span>
+              <br />
+               <span className={styles.logLabel}>conversions</span>
+              </div>
+              <div className={styles.revenueBlock}>
+              <span>{`$${userLogs[user.Id].revenue.toFixed(2)}`}</span>
               </div>
             </div>
           </div>
-        ))
+        </div>
+      )) : null
       }
     </div>
   );
